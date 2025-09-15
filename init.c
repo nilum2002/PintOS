@@ -136,11 +136,9 @@ int pintos_init (void)
   } else {
     // TODO: no command line passed to kernel. Run interactively 
     printf("Welcome to the PintOS...\n");
-     char input_buf[100];
-    const char *Strings_to_match[] =
-      { "whoami", "shutdown", "time", "ram", "thread", "priority", "exit", NULL };
-
-    size_t idx = 0;
+    char input_buf[100];
+    const char *Strings_to_match[] = { "whoami", "shutdown", "time", "ram", "thread", "priority", "exit", NULL };
+    int idx = 0;
     printf ("CS2043>");
     while (true)
       {
@@ -148,8 +146,9 @@ int pintos_init (void)
         if (ch < 0)
           continue;
         
-        printf ("%c", (char) ch);
-
+        // printf ("%c", (char) ch);
+        
+       
         
         if (ch == '\r' || ch == '\n')
           {
@@ -204,16 +203,26 @@ int pintos_init (void)
             idx = 0;
             printf ("CS2043>");
           }
+        else if (ch == '\b'){
+        
+          if (idx > 0){
+            idx--;
+            input_buf[idx] = '\0';
+           
+            printf("\b \b");
+
+          }
+        }
         else
           {
             
             if (idx < (sizeof(input_buf) - 1))
               {
                 input_buf[idx++] = (char) ch;
-              }
-            else
-              {
-                /* Buffer full: ignore further input until newline */
+                if(ch >= 32 && ch <= 126){
+                    printf("%c", (char)ch);
+                }
+                
               }
           }
       }
